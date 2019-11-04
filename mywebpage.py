@@ -5,15 +5,10 @@ import json
 app = Flask(__name__)
 
 @app.route("/")
-def main():
+def render_main():
     with open('county_demographics.json') as demographics_data:
         states = json.load(demographics_data)
-
-def fun_fact(states):
-  state = {}
-  for data in states:
-    
-
+    return render_template('home.html')
 
 if __name__=="__main__":
     app.run(debug=False)
