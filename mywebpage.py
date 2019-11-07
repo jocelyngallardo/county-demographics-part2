@@ -30,8 +30,8 @@ def get_fact(counties, states):
      counter = 0
      for data in counties:
         if data['State'] == states:
-            counter+=1
-     fact = str(states) + ' has ' + str(counter) + ' percent of its population under the age of 5 in one if its counties.'
+            counter = data['Age']['Percent Under 5 Years']
+     fact = 'Fun Fact: ' + str(states) + ' has ' + str(counter) + ' percent of its population under the age of 5 in one if its counties.'
      return fact
     
 if __name__=="__main__":
