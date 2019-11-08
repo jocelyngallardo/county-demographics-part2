@@ -14,7 +14,13 @@ def render_main():
 def render_reply():
     with open('county_demographics.json') as demographics_data:
         demographicData = json.load(demographics_data)
-    return render_template('home.html', states = get_state_options(demographicData), fact = get_fact(demographicData, request.args['states']))
+    return render_template('home.html', states = get_state_options(demographicData), county = get_county_options(demographicData, request.args['states']), fact = '')
+    
+@app.route("/secondReply")
+def render_second_reply():
+    with open('county_demographics.json') as demographics_data:
+        demographicData = json.load(demographics_data)
+    return render_template('home.html', states = get_state_options(demographicData), fact = get_fact(demographicData, request.args['county']))
 
 def get_state_options(counties):
     listOfStates = []
@@ -25,13 +31,23 @@ def get_state_options(counties):
     for state in listOfStates:
         option = option + Markup("<option value=\"" + state + "\">" + state + "</option>")
     return option
+    
+def get_county_options(counties, states):
+    listOfCounties = []
+    option = ''
+    for data in counties:
+        if (data['County'] not in listOfCounties) and data['State'] == states:
+            listOfCounties.append(data['County'])
+    for county in listOfCounties:
+            option = option + Markup("<option value=\"" + county + "\">" + county + "</option>")
+    return option
 
-def get_fact(counties, states):
+def get_fact(counties, county):
      counter = 0
      for data in counties:
         if data['State'] == states:
             counter = data['Age']['Percent Under 5 Years']
-     fact = 'Fun Fact: ' + str(states) + ' has ' + str(counter) + ' percent of its population under the age of 5 in one if its counties.'
+     fact = 'Fun Fact: ' + str(county) + ' has ' + str(counter) + ' percent of their population under age of five in.'
      return fact
     
 if __name__=="__main__":
